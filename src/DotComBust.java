@@ -1,8 +1,8 @@
 //page 144 book.
-import java.util.*
+import java.util.*;
 
 public class DotComBust {
-    private Gamehelper helper = new Gamehelper();
+    private GameHelper helper = new GameHelper();
     private ArrayList<DotCom> dotComsList = new ArrayList<DotCom>();
     private int numOfGuesses = 0;
 
@@ -25,6 +25,44 @@ public class DotComBust {
             ArrayList<String> newLocation = helper.placeDotCom(3);
             dotComToSet.setLocationCells(newLocation);
         }
+    }
+    private void startPlaying(){
+        while(!dotComsList.isEmpty()){
+            String userGuess = helper.getUserInput("Please choose a field!");
+            checkUserguess(userGuess);
+        }
+        finishGame();
+    }
+    private void checkUserguess(String userGuess){
+        this.numOfGuesses++;
+        String resault = "miss";
+
+        for(DotCom dotComToTest : dotComsList){
+            resault = dotComToTest.checkYourself(userGuess);
+            if (resault.equals("hit")){
+                break;
+            }
+            if(resault.equals("kill")){
+                dotComsList.remove(dotComToTest);
+                break;
+            }
+        }
+        System.out.println(resault);
+    }
+    private void finishGame(){
+        System.out.println("All Dot Coms are dead! Your stock is now worthless.");
+        if (numOfGuesses <= 18) {
+            System.out.println("It only took you " + numOfGuesses + " guesses.");
+            System.out.println("You got out before your options sank.");
+        } else {
+            System.out.println("Took you long enough. "+ numOfGuesses + "guesses.");
+            System.out.println("Fish are dancing with your options.");
+        }
+    }
+    public static void main(String[] args) {
+        DotComBust game = new DotComBust();
+        game.setUpGame();
+        game.startPlaying();
     }
 
 }
